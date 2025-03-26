@@ -1,0 +1,35 @@
+name: .NET Desktop
+
+on:
+  # Executa o workflow quando há push na branch "master" ou "main" (ajuste conforme sua branch principal)
+  push:
+    branches: [ "master" ]
+  # Também executa quando houver pull request nessas branches
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Faz checkout do código
+      - uses: actions/checkout@v3
+
+      # Configura o ambiente .NET (aqui usando a versão 6.0)
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      # Restaura as dependências
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Compila o projeto
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # Executa testes (caso tenha testes no seu projeto)
+      - name: Test
+        run: dotnet test --configuration Release --no-build

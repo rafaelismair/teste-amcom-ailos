@@ -1,0 +1,24 @@
+# Visuais e configurações locais do Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Pastas de build
+bin/
+obj/
+
+# Logs, relatórios e arquivos gerados por ferramentas
+*.log
+*.ds_store
+*.plist
+Thumbs.db
+
+# Pacotes gerados pelo NuGet
+*.nupkg
+Packages/
+
+# Arquivos temporários
+*.tmp
+*.cache

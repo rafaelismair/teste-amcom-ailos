@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Questao2;
+using RestSharp;
 
 public class Program
 {
@@ -23,8 +25,52 @@ public class Program
 
     public static int getTotalScoredGoals(string team, int year)
     {
-        
-        return 0;
+        int totalGoals = 0;
+
+        totalGoals += GetGoalsByTeamPosition(team, year, "team1");
+        totalGoals += GetGoalsByTeamPosition(team, year, "team2");
+
+        return totalGoals;
     }
+
+    private static int GetGoalsByTeamPosition(string team, int year, string teamPosition)
+    {
+        int totalGoals = 0;
+        int currentPage = 1;
+        int totalPages = 1;
+        string goalsField = teamPosition == "team1" ? "team1goals" : "team2goals";
+
+        var client = new RestClient("https://jsonmock.hackerrank.com/api/football_matches");
+
+        while (currentPage <= totalPages)
+        {
+            var request = new RestRequest();
+            request.AddParameter("year", year);
+            request.AddParameter(teamPosition, team);
+            request.AddParameter("page", currentPage);
+
+            var response = client.Execute(request);
+            var result = JsonConvert.DeserializeObject<ApiResponse>(response.Content);
+
+            foreach (var match in result.data)
+            {
+                if (int.TryParse(teamPosition == "team1" ? match.team1goals : match.team2goals, out int goals))
+                {
+                    totalGoals += goals;
+                }
+            }
+
+            totalPages = result.total_pages;
+            currentPage++;
+        }
+
+        return totalGoals;
+    }
+
+    
+
+    
+
+
 
 }

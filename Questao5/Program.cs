@@ -1,4 +1,8 @@
 using MediatR;
+using Questao5.Domain.Language;
+using Questao5.Infrastructure.Database;
+using Questao5.Infrastructure.Database.CommandStore;
+using Questao5.Infrastructure.Database.QueryStore;
 using Questao5.Infrastructure.Sqlite;
 using System.Reflection;
 
@@ -16,6 +20,34 @@ builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IDatabaseConfig, DatabaseConfig>();
+builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
+builder.Services.AddScoped<IContaCommandStore, ContaCommandStore>();
+builder.Services.AddScoped<IContaQueryStore, ContaQueryStore>();
+builder.Services.AddScoped<IIdempotenciaCommandStore, IdempotenciaCommandStore>();
+
+
+builder.Services.AddSingleton<IDatabaseConfig>(provider =>
+{
+    // Lê "DatabaseName" do appsettings.json ou usa "Data Source=database.sqlite" como default
+    var configValue = builder.Configuration.GetValue<string>(
+        "DatabaseName",
+        "Data Source=database.sqlite"
+    );
+
+    // Instancia DatabaseConfig com esse valor
+    return new DatabaseConfig { Name = configValue };
+});
+
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new TipoMovimentoEnumConverter());
+    });
+
+
 
 var app = builder.Build();
 

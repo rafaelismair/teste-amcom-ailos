@@ -16,11 +16,9 @@ namespace Questao5.Tests
         [Fact]
         public async Task Handle_ShouldThrowException_WhenContaNaoExiste()
         {
-            // Arrange
             var contaCommandStore = Substitute.For<IContaCommandStore>();
             var idempotenciaCommandStore = Substitute.For<IIdempotenciaCommandStore>();
 
-            // Retorna null ao buscar a conta => conta inexistente
             contaCommandStore.ObterContaCorrentePorIdAsync("abc").Returns((ContaCorrente)null);
 
             var handler = new CreateMovimentacaoCommandHandler(
@@ -34,7 +32,6 @@ namespace Questao5.Tests
                 TipoMovimento = Domain.Enumerators.TipoMovimentoEnum.C
             };
 
-            // Act & Assert
             var ex = await Assert.ThrowsAsync<MovimentacaoException>(() =>
                 handler.Handle(command, CancellationToken.None));
 

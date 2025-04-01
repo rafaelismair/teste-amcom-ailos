@@ -27,7 +27,7 @@ namespace Questao5.Infrastructure.Services.Controllers
         /// <response code="400">Conta não encontrada ou inativa</response>
         [HttpGet("{idContaCorrente}")]
         [ProducesResponseType(typeof(GetSaldoQueryResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErroResposta), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErroReponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetSaldo(string idContaCorrente)
         {
             var query = new GetSaldoQuery { IdContaCorrente = idContaCorrente };
@@ -39,7 +39,7 @@ namespace Questao5.Infrastructure.Services.Controllers
             }
             catch (MovimentacaoException ex)
             {
-                return BadRequest(new ErroResposta
+                return BadRequest(new ErroReponse
                 {
                     Mensagem = ex.Message,
                     Tipo = ex.TipoErro

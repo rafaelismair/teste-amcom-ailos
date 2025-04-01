@@ -1,4 +1,5 @@
 using MediatR;
+using Questao5.Domain.Language;
 using Questao5.Infrastructure.Database;
 using Questao5.Infrastructure.Database.CommandStore;
 using Questao5.Infrastructure.Database.QueryStore;
@@ -38,6 +39,14 @@ builder.Services.AddSingleton<IDatabaseConfig>(provider =>
     // Instancia DatabaseConfig com esse valor
     return new DatabaseConfig { Name = configValue };
 });
+
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new TipoMovimentoEnumConverter());
+    });
+
 
 
 var app = builder.Build();

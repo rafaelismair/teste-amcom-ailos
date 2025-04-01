@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Questao5.Application;
-using Questao5.Application.Commands;
+using Questao5.Application.Commands.Requests;
+using Questao5.Application.Commands.Responses;
 using Questao5.Domain.Language;
 using System;
 using System.Net;
@@ -28,7 +29,7 @@ namespace Questao5.Infrastructure.Services.Controllers
         /// <response code="400">Dados inválidos (ex: conta não encontrada, inativa, valor inválido)</response>
         [HttpPost]
         [ProducesResponseType(typeof(CreateMovimentacaoCommandResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErroResposta), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErroReponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Post([FromBody] CreateMovimentacaoCommand command)
         {
             try
@@ -38,7 +39,7 @@ namespace Questao5.Infrastructure.Services.Controllers
             }
             catch (MovimentacaoException ex)
             {
-                return BadRequest(new ErroResposta
+                return BadRequest(new ErroReponse
                 {
                     Mensagem = ex.Message,
                     Tipo = ex.TipoErro
@@ -51,9 +52,5 @@ namespace Questao5.Infrastructure.Services.Controllers
         }
     }
 
-    public class ErroResposta
-    {
-        public string Mensagem { get; set; }
-        public string Tipo { get; set; }
-    }
+    
 }

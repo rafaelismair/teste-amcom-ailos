@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using Questao5.Application.Commands;
+using Questao5.Application.Commands.Requests;
+using Questao5.Application.Commands.Responses;
 using Questao5.Domain.Entities;
 using Questao5.Domain.Language;
 using Questao5.Infrastructure.Database.CommandStore;
@@ -53,7 +54,8 @@ namespace Questao5.Application.Handlers
             {
                 throw new MovimentacaoException("Valor deve ser positivo.", "INVALID_VALUE");
             }
-            if (request.TipoMovimento != "C" && request.TipoMovimento != "D")
+            if (request.TipoMovimento != Domain.Enumerators.TipoMovimentoEnum.D && 
+                request.TipoMovimento != Domain.Enumerators.TipoMovimentoEnum.C)
             {
                 throw new MovimentacaoException("Tipo de movimento inválido.", "INVALID_TYPE");
             }
@@ -65,7 +67,7 @@ namespace Questao5.Application.Handlers
                     IdMovimento = Guid.NewGuid().ToString().ToUpper(),
                     IdContaCorrente = request.IdContaCorrente,
                     DataMovimento = DateTime.Now.ToString("dd/MM/yyyy"),
-                    TipoMovimento = request.TipoMovimento,
+                    TipoMovimento = request.TipoMovimento.ToString(),
                     Valor = request.Valor
                 }
             );

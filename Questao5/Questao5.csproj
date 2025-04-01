@@ -45,7 +45,6 @@
   <ItemGroup>
     <Folder Include="Application\Queries\Requests\" />
     <Folder Include="Application\Queries\Responses\" />
-    <Folder Include="Domain\Enumerators\" />
   </ItemGroup>
 
 </Project>
